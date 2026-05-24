@@ -25,17 +25,25 @@ function MarketsInner() {
   const searchParams = useSearchParams()
   const qParam = searchParams.get('q') ?? ''
 
-  const [coins,   setCoins]   = useState([])
-  const [loading, setLoading] = useState(true)
-  const [q,       setQ]       = useState(qParam)
-  const [sortKey, setSortKey] = useState('market_cap_rank')
-  const [asc,     setAsc]     = useState(true)
+  const [coins,        setCoins]        = useState([])
+  const [loading,      setLoading]      = useState(true)
+  const [error,        setError]        = useState(false)
+  const [q,            setQ]            = useState(qParam)
+  const [sortKey,      setSortKey]      = useState('market_cap_rank')
+  const [asc,          setAsc]          = useState(true)
+  const [searchFocused, setSearchFocused] = useState(false)
 
   const load = useCallback(async () => {
-    const res = await fetch('/api/coins?perPage=100')
-    if (!res.ok) return
-    setCoins(await res.json())
-    setLoading(false)
+    setError(false)
+    try {
+      const res = await fetch('/api/coins?perPage=100')
+      if (!res.ok) { setError(true); return }
+      setCoins(await res.json())
+    } catch {
+      setError(true)
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
   useEffect(() => { load() }, [load])
@@ -93,15 +101,23 @@ function MarketsInner() {
               onChange={e => setQ(e.target.value)}
               placeholder="Filter coins…"
               className="rounded-xl pl-9 pr-4 py-2 text-sm"
-              style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--t1)', outline: 'none', width: 220 }}
-              onFocus={e => (e.target.style.borderColor = '#6366f1')}
-              onBlur={e  => (e.target.style.borderColor = 'var(--border)')}
+              style={{ background: 'var(--bg-card)', border: `1px solid ${searchFocused ? '#6366f1' : 'var(--border)'}`, color: 'var(--t1)', outline: 'none', width: 220 }}
+              onFocus={() => setSearchFocused(true)}
+              onBlur={()  => setSearchFocused(false)}
               aria-label="Filter coins by name or symbol"
             />
           </div>
         </header>
 
-        <div className="card overflow-hidden">
+        {error && (
+          <div className="card p-10 text-center space-y-3">
+            <p className="text-3xl">⚠️</p>
+            <p className="font-bold" style={{ color: 'var(--t1)' }}>Failed to load market data</p>
+            <button onClick={load} className="px-4 py-2 rounded-xl text-sm font-semibold" style={{ background: '#6366f1', color: 'white' }}>Retry</button>
+          </div>
+        )}
+
+        {!error && <div className="card overflow-hidden">
           <div className="overflow-x-auto no-sb">
             <table className="data-table">
               <thead>
@@ -134,7 +150,7 @@ function MarketsInner() {
               </tbody>
             </table>
           </div>
-        </div>
+        </div>}
       </div>
     </>
   )

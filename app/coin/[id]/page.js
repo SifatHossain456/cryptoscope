@@ -81,15 +81,23 @@ export default function CoinPage({ params }) {
   const [data,    setData]    = useState(null)
   const [range,   setRange]   = useState(7)
   const [loading, setLoading] = useState(true)
+  const [error,   setError]   = useState(false)
 
   useEffect(() => { params.then(p => setId(p.id)) }, [params])
 
   const load = useCallback(async (coinId, days) => {
     if (!coinId) return
     setLoading(true)
-    const res = await fetch(`/api/coin/${coinId}?days=${days}`)
-    if (res.ok) setData(await res.json())
-    setLoading(false)
+    setError(false)
+    try {
+      const res = await fetch(`/api/coin/${coinId}?days=${days}`)
+      if (res.ok) setData(await res.json())
+      else setError(true)
+    } catch {
+      setError(true)
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
   useEffect(() => { if (id) load(id, range) }, [id, range, load])
@@ -218,14 +226,25 @@ export default function CoinPage({ params }) {
           {coin.description?.en && (
             <section aria-label="About" className="card p-5">
               <h2 className="text-sm font-bold mb-3" style={{ color: 'var(--t1)' }}>About {coin.name}</h2>
-              <p
-                className="text-xs leading-relaxed"
-                style={{ color: 'var(--t2)' }}
-                dangerouslySetInnerHTML={{ __html: coin.description.en.split('. ').slice(0, 5).join('. ') + '.' }}
-              />
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--t2)' }}>
+                {coin.description.en.replace(/<[^>]+>/g, '').split('. ').slice(0, 5).join('. ') + '.'}
+              </p>
             </section>
           )}
         </>
+      ) : error ? (
+        <div className="card p-12 text-center space-y-3">
+          <p className="text-3xl">⚠️</p>
+          <p className="font-bold" style={{ color: 'var(--t1)' }}>Failed to load coin data</p>
+          <p className="text-xs" style={{ color: 'var(--t3)' }}>Check your connection or try again</p>
+          <button
+            onClick={() => load(id, range)}
+            className="px-4 py-2 rounded-xl text-sm font-semibold mt-2"
+            style={{ background: '#6366f1', color: 'white' }}
+          >
+            Retry
+          </button>
+        </div>
       ) : (
         <p style={{ color: 'var(--t3)' }}>Coin not found.</p>
       )}

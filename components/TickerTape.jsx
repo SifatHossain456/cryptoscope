@@ -4,13 +4,14 @@ import { fmtUsd, fmtPct } from '@/lib/format'
 
 export default function TickerTape({ coins = [] }) {
   if (!coins.length) return null
-  const items = [...coins, ...coins]   // duplicate for infinite scroll
+  const items = [...coins, ...coins]
 
   return (
     <div
       className="ticker-wrap border-b py-1.5"
       style={{ borderColor: 'var(--border)', background: 'var(--bg-card)' }}
       aria-label="Live price ticker"
+      role="marquee"
     >
       <div className="ticker-track gap-8">
         {items.map((coin, i) => {
@@ -20,6 +21,8 @@ export default function TickerTape({ coins = [] }) {
             <Link
               key={`${coin.id}-${i}`}
               href={`/coin/${coin.id}`}
+              aria-hidden={i >= coins.length ? 'true' : undefined}
+              tabIndex={i >= coins.length ? -1 : undefined}
               className="inline-flex items-center gap-2 px-2 hover:opacity-70 transition-opacity shrink-0"
             >
               {coin.image && <img src={coin.image} alt="" width={14} height={14} className="rounded-full" />}
