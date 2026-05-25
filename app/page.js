@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
 import GlobalStats  from '@/components/GlobalStats'
 import HeatMap      from '@/components/HeatMap'
@@ -94,8 +94,12 @@ export default function DashboardPage() {
 
   useEffect(() => { load(); const id = setInterval(load, REFRESH_MS); return () => clearInterval(id) }, [load])
 
-  const gainers = [...coins].sort((a, b) => (b.price_change_percentage_24h ?? 0) - (a.price_change_percentage_24h ?? 0)).slice(0, 4)
-  const losers  = [...coins].sort((a, b) => (a.price_change_percentage_24h ?? 0) - (b.price_change_percentage_24h ?? 0)).slice(0, 4)
+  const gainers = useMemo(() =>
+    [...coins].sort((a, b) => (b.price_change_percentage_24h ?? 0) - (a.price_change_percentage_24h ?? 0)).slice(0, 4)
+  , [coins])
+  const losers = useMemo(() =>
+    [...coins].sort((a, b) => (a.price_change_percentage_24h ?? 0) - (b.price_change_percentage_24h ?? 0)).slice(0, 4)
+  , [coins])
 
   return (
     <>

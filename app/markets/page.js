@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import CoinRow from '@/components/CoinRow'
@@ -55,12 +55,6 @@ function MarketsInner() {
     else { setSortKey(key); setAsc(false) }
   }
 
-  const filtered = coins.filter(c => {
-    if (!q) return true
-    const query = q.toLowerCase()
-    return c.name.toLowerCase().includes(query) || c.symbol.toLowerCase().includes(query)
-  })
-
   const sortField = {
     market_cap_rank:             c => c.market_cap_rank,
     current_price:               c => c.current_price,
@@ -71,12 +65,19 @@ function MarketsInner() {
     total_volume:                c => c.total_volume,
   }
 
-  const sorted = [...filtered].sort((a, b) => {
-    const fn = sortField[sortKey]
-    if (!fn) return 0
-    const diff = (fn(a) ?? 0) - (fn(b) ?? 0)
-    return asc ? diff : -diff
-  })
+  const sorted = useMemo(() => {
+    const query = q.toLowerCase()
+    const filtered = coins.filter(c => {
+      if (!q) return true
+      return c.name.toLowerCase().includes(query) || c.symbol.toLowerCase().includes(query)
+    })
+    return [...filtered].sort((a, b) => {
+      const fn = sortField[sortKey]
+      if (!fn) return 0
+      const diff = (fn(a) ?? 0) - (fn(b) ?? 0)
+      return asc ? diff : -diff
+    })
+  }, [coins, q, sortKey, asc])
 
   return (
     <>
