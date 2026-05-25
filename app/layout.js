@@ -3,8 +3,20 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
 export const metadata = {
-  title: { default: 'CryptoScope', template: '%s — CryptoScope' },
+  title: { default: 'CryptoScope — Live Crypto Dashboard', template: '%s — CryptoScope' },
   description: 'Live crypto market dashboard — prices, heatmap, Fear & Greed index, sparklines for 100+ coins.',
+  keywords: ['crypto', 'cryptocurrency', 'bitcoin', 'ethereum', 'market dashboard', 'prices', 'DeFi'],
+  openGraph: {
+    title: 'CryptoScope — Live Crypto Dashboard',
+    description: 'Live crypto market dashboard — prices, heatmap, Fear & Greed index, sparklines for 100+ coins.',
+    type: 'website',
+    siteName: 'CryptoScope',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CryptoScope — Live Crypto Dashboard',
+    description: 'Live crypto market dashboard — prices, heatmap, Fear & Greed index, sparklines for 100+ coins.',
+  },
 }
 
 export default function RootLayout({ children }) {
