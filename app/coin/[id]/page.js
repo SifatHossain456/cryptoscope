@@ -206,7 +206,7 @@ export default function CoinPage({ params }) {
               <StatRow label="30d"  value={<span className={pctClass(pct30d)}>{fmtPct(pct30d)}</span>} />
               <StatRow label="1y"   value={<span className={pctClass(coin.market_data?.price_change_percentage_1y)}>{fmtPct(coin.market_data?.price_change_percentage_1y)}</span>} />
               <StatRow label="From ATH" value={<span className={pctClass(coin.market_data?.ath_change_percentage?.usd)}>{fmtPct(coin.market_data?.ath_change_percentage?.usd)}</span>} />
-              {coin.links?.homepage?.[0] && (
+              {/^https?:\/\//i.test(coin.links?.homepage?.[0] ?? '') && (
                 <div className="pt-3">
                   <a
                     href={coin.links.homepage[0]}

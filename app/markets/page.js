@@ -88,7 +88,7 @@ function MarketsInner() {
           <div>
             <h1 className="text-2xl font-black" style={{ color: 'var(--t1)' }}>All Markets</h1>
             <p className="text-xs mt-0.5" style={{ color: 'var(--t3)' }}>
-              {loading ? '…' : `${filtered.length.toLocaleString()} coins`} · Top 100 by market cap
+              {loading ? '…' : `${sorted.length.toLocaleString()} coins`} · Top 100 by market cap
             </p>
           </div>
 
@@ -114,7 +114,7 @@ function MarketsInner() {
           <div className="card p-10 text-center space-y-3">
             <p className="text-3xl">⚠️</p>
             <p className="font-bold" style={{ color: 'var(--t1)' }}>Failed to load market data</p>
-            <button onClick={load} className="px-4 py-2 rounded-xl text-sm font-semibold" style={{ background: '#6366f1', color: 'white' }}>Retry</button>
+            <button type="button" onClick={load} className="px-4 py-2 rounded-xl text-sm font-semibold" style={{ background: '#6366f1', color: 'white' }}>Retry</button>
           </div>
         )}
 
