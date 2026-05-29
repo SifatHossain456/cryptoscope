@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CryptoScope — Live Crypto Dashboard
+
+Live cryptocurrency market dashboard with prices, market cap heatmap, Fear & Greed index, sparklines, and full coin detail pages — for 100+ coins. Powered by CoinGecko.
+
+## Features
+
+- **Market Overview** — Top 100 coins by market cap with live price, 24h/7d change, volume, and sparkline charts
+- **Coin Detail** — Full market data page per coin: ATH, circulating supply, price history, and 1h/24h/7d/30d/1y changes
+- **Price Heatmap** — Visual grid of the market by 24h performance
+- **Fear & Greed Index** — Live sentiment indicator from Alternative.me
+- **Ticker tape** — Continuous scrolling price ticker at the top of every page
+- **Search** — Filter coins by name or symbol in real time with `useMemo`
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 App Router |
+| Styling | Tailwind CSS v4 + CSS variables |
+| Data | CoinGecko API v3 (free tier) |
+| Charts | Canvas-based sparklines |
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+git clone https://github.com/SifatHossain456/cryptoscope.git
+cd cryptoscope
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+No API key required — uses CoinGecko free public API.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/
+├── page.js              # Market overview + heatmap
+├── markets/             # Full sortable market table
+└── coin/[id]/           # Coin detail page
+```
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
