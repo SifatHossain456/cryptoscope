@@ -6,6 +6,7 @@ import { useState } from 'react'
 const NAV = [
   { href: '/',        label: 'Dashboard' },
   { href: '/markets', label: 'Markets'   },
+  { href: '/portfolio', label: 'Portfolio' },
 ]
 
 export default function Navbar() {
